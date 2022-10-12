@@ -13,7 +13,6 @@ var submitBtn = document.getElementById('submit');
 var startBtn = document.getElementById('start');
 var initialsEl = document.getElementById('initials');
 var feedbackEl = document.getElementById('feedback');
-
 // sound effects
 var sfxRight = new Audio('assets/sfx/correct.wav');
 var sfxWrong = new Audio('assets/sfx/incorrect.wav');
@@ -21,12 +20,13 @@ var sfxWrong = new Audio('assets/sfx/incorrect.wav');
 
 function startQuiz() {
     // hide start screen
-
+var startscreen = document.getElementById('start-screen')
+startscreen.setAttribute('class', 'hide');
     // un-hide questions section
-
+questionsEl.removeAttribute('class');
     //start timer (high)
-you need to declare a var named timerId. You will also need to use setInterval and clockTick
-
+//you need to declare a var named timerId. You will also need to use setInterval and clockTick
+window.setInterval(clockTick,1000)
     //show starting time (high)
 
     getQuestion();
@@ -45,16 +45,22 @@ function getQuestion() { //this function is going to get the data from the quest
 
     // create a for loop that creates the choice elements
     for (var i = 0; i < currentQuestion.choices.length; i++) {
+        let button = document.createElement("button")
+        button.setAttribute("class","choice")
+        button.setAttribute("value",currentQuestion.choices[i])
+        buttonEl.textContent = i+ 1 +') ' + choice;
         // create new button for each choice
         //.createElement
         //.setAttribute (set a class="choice")
         //.textContent
         //.appendChild
+        choicesEl.appendChild(buttonEl)
     }
 }
 
 function questionClick(event) {
     var buttonEl = event.target;
+
 
     // if the clicked element is not a choice button, do nothing.
     if (!buttonEl.matches('.choice')) {
@@ -62,18 +68,31 @@ function questionClick(event) {
     }
 
     // check if user guessed right or wrong
-    if (true) { //replace true with a conditional statement that checks if the clicked choice button's value is the same as the questions[currentQuestionIndex]'s answer
+    if (buttonEl.value !== questions[currentQuestionIndex].answer) { //replace true with a conditional statement that checks if the clicked choice button's value is the same as the questions[currentQuestionIndex]'s answer
         //incorrect answer scenario
 
         // penalize time
+        time -= 5;
+        if(time <0) {
+            time = 0;
+        }
         // display new time on page
-    } else {
-        //correct scenario
+        timerEl.textContent = time;
 
+        feedbackEl.textContent = "wrong answer"
+    } 
+    
+    else {
+        //correct scenario
+        feedbackEl.textContent = "correct!"
         // move to next question
     }
     // flash right/wrong feedback on page
-
+    feedbackEl.setAttribute('class','feedback');
+    setTimeout(function () {
+    feedbackEl.setAttribute('class', 'feedback hide' );
+    }, 3000);
+    
     // move to next question
     currentQuestionIndex++;
 
@@ -122,13 +141,17 @@ function saveHighscore() {
 
         //JSON.parse
         // get saved scores from localstorage (highscores), or if not any, set to empty array
-        
+        var highscores = JSON.parse(window.localStorage.getItem('highscores')) || []
 
         // format new score object for current user
-        
+        var newScore ={
+            score: time,
+            initials
+        };
 
         // save to localstorage
-        
+        highscores.push(newScore);
+        window.localStorage.setitem('highscores', Json.stringify(highscores));
 
         // redirect to next page
         window.location.href = 'highscores.html';
