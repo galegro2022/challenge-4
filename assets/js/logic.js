@@ -14,8 +14,8 @@ var startBtn = document.getElementById('start');
 var initialsEl = document.getElementById('initials');
 var feedbackEl = document.getElementById('feedback');
 // sound effects
-var sfxRight = new Audio('assets/sfx/correct.wav');
-var sfxWrong = new Audio('assets/sfx/incorrect.wav');
+// var sfxRight = new Audio('assets/sfx/correct.wav');
+// var sfxWrong = new Audio('assets/sfx/incorrect.wav');
 
 
 function startQuiz() {
@@ -46,15 +46,17 @@ function getQuestion() { //this function is going to get the data from the quest
     // create a for loop that creates the choice elements
     for (var i = 0; i < currentQuestion.choices.length; i++) {
         let button = document.createElement("button")
+        var choice = currentQuestion.choices[i]
         button.setAttribute("class","choice")
-        button.setAttribute("value",currentQuestion.choices[i])
-        buttonEl.textContent = i+ 1 +') ' + choice;
+        button.setAttribute("value", choice)
+        button.textContent = i + 1 +') ' + choice;
+        console.log(choice, "hello")
         // create new button for each choice
         //.createElement
         //.setAttribute (set a class="choice")
         //.textContent
         //.appendChild
-        choicesEl.appendChild(buttonEl)
+        choicesEl.appendChild(button)
     }
 }
 
